@@ -3,3 +3,4 @@ config.py
 docker/components/*
 .idea
 venv
+**/deploy.sh
