@@ -1,7 +1,5 @@
 FROM python:3
 
-#RUN apt-get update
-#RUN apt-get install -y python3 python3-pip
 RUN pip install dsmr-parser
 RUN pip install influxdb-client
 RUN pip install click
