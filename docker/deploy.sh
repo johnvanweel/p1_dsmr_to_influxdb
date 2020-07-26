@@ -1,0 +1,1 @@
+docker -H 192.168.0.155 run --restart=always --privileged --device /dev/ttyUSB0 p1-to-influxdb

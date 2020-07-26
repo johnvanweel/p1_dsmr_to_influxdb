@@ -1,0 +1,1 @@
+docker -H 192.168.0.155 build -t p1-to-influxdb components

@@ -1,9 +1,20 @@
-Dit script leest alle waarden van de slimme meter die ondersteund worden door de dsmr-parser module.
+# p1-influxdb
 
-Dus niet alleen het verbruik maar ook interesante dingen zoals het wattage per fase of het aantal keren dat er een voltage verlaging is geweest.
 
-Het script stuurt de informatie door naar InfluxDB. Met Grafana zijn er mooie grafieken van te maken.
+### Prerequisites
+*Download hypriot and flash:* 
 
-Importeer de json file in garafa om meteen een mooi dashboard te krijgen.
+https://github.com/hypriot/flash
 
-Live demo: https://grafana1.datux.nl/d/LIOTB61Zz/power-usage?orgId=1&refresh=10s
+
+*Expose Docker to dev machine:*
+- SSH into hypriot
+- sudo nano /lib/systemd/system/docker.service
+- Change this line: ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375
+- sudo systemctl daemon-reload
+- sudo systemctl restart docker 
+
+### Run
+cd docker/components
+
+sh build.sh
