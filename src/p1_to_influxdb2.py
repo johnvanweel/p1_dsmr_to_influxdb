@@ -14,6 +14,37 @@ def main():
     pass
 
 
+@main.command()
+@click.option('--host', '-h')
+@click.option('--token', '-t')
+@click.option('--organization', '-o')
+@click.option('--bucket', '-b')
+@click.option('--device', '-d')
+def main(host, token, organization, bucket, device):
+    connect_to_influx(host, token, organization)
+
+    while True:
+        try:
+            serial_reader = SerialReader(
+                device=device,
+                serial_settings=SERIAL_SETTINGS_V4,
+                telegram_specification=telegram_specifications.V4
+            )
+
+            print("Waiting for P1 port measurement..")
+
+            for telegram in serial_reader.read():
+                for key, value in telegram.items():
+                    if hasattr(value, "value") and (isinstance(value.value, int) or isinstance(value.value, decimal.Decimal)):
+                        name = determine_obis_name(key)
+                        measure(bucket, determine_type(key), name, value.value)
+
+        except Exception as e:
+            print(str(e))
+            print("Pausing and restarting...")
+            time.sleep(10)
+
+
 def connect_to_influx(host, token, organization):
     global write_api
     print("Connecting to database")
@@ -38,39 +69,13 @@ def measure(bucket, measurement_type, measurement_key, measurement_value):
                     record=Point("p1").tag("type", measurement_type).field(measurement_key, float(measurement_value)))
 
 
-@main.command()
-@click.option('--host', '-h')
-@click.option('--token', '-t')
-@click.option('--organization', '-o')
-@click.option('--bucket', '-b')
-@click.option('--device', '-d')
-def main(host, token, organization, bucket, device):
-    connect_to_influx(host, token, organization)
-
-    while True:
-        try:
-            serial_reader = SerialReader(
-                device=device,
-                serial_settings=SERIAL_SETTINGS_V4,
-                telegram_specification=telegram_specifications.V4
-            )
-
-            print("Waiting for P1 port measurement..")
-
-            for telegram in serial_reader.read():
-                for key, value in telegram.items():
-                    if hasattr(value, "value"):
-                        name = determine_obis_name(key)
-
-                        if isinstance(value.value, int) or isinstance(value.value, decimal.Decimal):
-                            if key == 'HOURLY_GAS_METER_READING':
-                                measure(bucket, "gas", name, value.value)
-                            else:
-                                measure(bucket, "power", name, value.value)
-        except Exception as e:
-            print(str(e))
-            print("Pausing and restarting...")
-            time.sleep(10)
+def determine_type(key):
+    result = None
+    if key == 'HOURLY_GAS_METER_READING':
+        result = "gas"
+    else:
+        result = "power"
+    return result
 
 
 if __name__ == "__main__":
