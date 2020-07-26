@@ -17,4 +17,5 @@ https://github.com/hypriot/flash
 ### Run
 cd docker/components
 
-sh build.sh
+Add a deploy.sh: docker -H 192.168.0.155 run --restart=always --privileged --device /dev/ttyUSB0 p1-to-influxdb -e ENVIRONMENT_VARIABLES
+./prepareComponents.sh && ./build.sh && ./deploy.sh
