@@ -4,5 +4,5 @@ config.py
 venv
 p1_to_mqtt/docker/components/*
 p1_to_mqtt/docker/deploy.sh
-p1_to_influx/docker/components/*
-p1_to_influx/docker/deploy.sh
+mqtt_to_influx/docker/components/*
+mqtt_to_influx/docker/deploy.sh

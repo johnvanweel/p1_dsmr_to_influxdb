@@ -1,3 +1,5 @@
 dsmr_parser
 influxdb_client
 click
+paho-mqtt
+json
