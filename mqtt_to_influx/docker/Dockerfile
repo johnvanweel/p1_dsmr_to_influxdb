@@ -8,4 +8,4 @@ COPY *.py /tmp/p1/
 
 WORKDIR /tmp/p1/
 
-CMD ["sh", "-c", "python3 -u /tmp/p1/p1_to_influxdb2.py -h ${host} -pi ${infux_port} -pm ${mqtt_port} -o ${organization} -b ${bucket} -t ${token}"]
+CMD ["sh", "-c", "python3 -u /tmp/p1/mqtt_to_influx.py -h ${host} -o ${organization} -b ${bucket} -t ${token}"]

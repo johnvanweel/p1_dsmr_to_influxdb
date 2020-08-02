@@ -14,22 +14,20 @@ def main():
 
 @main.command()
 @click.option('--host', '-h')
-@click.option('--influx-port', '-pi')
-@click.option('--mqtt-port', '-mp')
 @click.option('--token', '-t')
 @click.option('--organization', '-o')
 @click.option('--bucket', '-b')
-def main(host, influx_port, mqtt_port, token, organization, bucket):
+def main(host, token, organization, bucket):
     global influx_bucket
     influx_bucket = bucket
-    connect_to_influx(host, influx_port, token, organization)
+    connect_to_influx(host, int(32999), token, organization)
 
     mqtt_client = mqtt.Client()
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
 
-    mqtt_client.connect(host, mqtt_port)
-
+    mqtt_client.connect(host, int(32184))
+    print("Connected to MQTT")
     mqtt_client.loop_forever()
 
 
@@ -42,13 +40,11 @@ def on_message(client, userdata, message):
     global influx_bucket
     key = message.topic[message.topic.rindex("/")+1:]
     value = float(message.payload)
-    print(f"Measuring {key}")
     try:
         measure(influx_bucket, determine_type(key), key, value)
     except Exception as e:
         print(e)
         pass
-    print(f"Measurement sent to InfluxDB: {key}: {value}")
 
 
 def measure(bucket, measurement_type, measurement_key, measurement_value):
@@ -72,6 +68,7 @@ def connect_to_influx(host, port, token, organization):
                             token=token,
                             org=organization)
     write_api = client.write_api(write_options=SYNCHRONOUS)
+    print("Connected to database")
 
 
 if __name__ == "__main__":

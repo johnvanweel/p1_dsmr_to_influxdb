@@ -8,4 +8,4 @@ COPY *.py /tmp/p1/
 
 WORKDIR /tmp/p1/
 
-CMD ["sh", "-c", "python3 -u /tmp/p1/p1_to_mqtt.py -h ${host} -pm ${mqtt-port} -t ${topic} -d ${device}"]
+CMD ["sh", "-c", "python3 -u /tmp/p1/p1_to_mqtt.py -h ${host} -t ${topic} -d ${device}"]

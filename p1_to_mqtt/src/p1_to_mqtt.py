@@ -16,10 +16,9 @@ def main():
 
 @main.command()
 @click.option('--host', '-h')
-@click.option('--mqtt-port', '-pm')
 @click.option('--topic', '-t')
 @click.option('--device', '-d')
-def main(host, port, topic, device):
+def main(host, topic, device):
     mqtt = paho.Client("pirate")
 
     while True:
@@ -42,7 +41,7 @@ def main(host, port, topic, device):
 
                 for key, value in measurement.items():
                     # Need to connect each time, or for some reason it disconnects without Exception
-                    mqtt.connect(host=host, port=port)
+                    mqtt.connect(host=host, port=32184)
                     mqtt.publish(topic=topic + "/" + key, payload=value)
                     mqtt.disconnect()
 
