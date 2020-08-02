@@ -1,6 +1,8 @@
 .vscode/settings.json
 config.py
-docker/components/*
 .idea
 venv
-docker/deploy.sh
+p1_to_mqtt/docker/components/*
+p1_to_mqtt/docker/deploy.sh
+p1_to_influx/docker/components/*
+p1_to_influx/docker/deploy.sh
